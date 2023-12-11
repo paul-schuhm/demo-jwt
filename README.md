@@ -1,4 +1,4 @@
-# démo - Json Web Token (RFC 7519)
+# démo - JSON Web Token (JWT) - RFC 7519
 
 Une simple démo d'application web PHP sur l'utilisation des [JSON Web Token](https://www.rfc-editor.org/rfc/rfc7519) (JWT) délivré par le système pour autoriser un·e utilisateur·ice à accéder à une partie protégée d'un site web.
 
