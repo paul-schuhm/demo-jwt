@@ -1,6 +1,6 @@
 # démo - JWT Token (RFC 7519)
 
-Une simple démo d'application web en PHP sur l'utilisation des JWT (JSON Web Token) dans le but d'autoriser un·e utilisateur·ice à accéder à des parties protégées du site.
+Une simple démo d'application web PHP sur l'utilisation des [JSON Web Token](https://www.rfc-editor.org/rfc/rfc7519) (JWT) délivré par le système pour autoriser un·e utilisateur·ice à accéder à une partie protégée d'un site web.
 
 ## Lancer le projet
 
@@ -10,7 +10,8 @@ Lancer le contenu du projet sur votre serveur local favori. Avec le serveur buil
 php -S localhost:5000
 ~~~
 
-Essayer d'accéder à la page sous le lien `Éditer le contenu du site`. Se connecter avec l'utilisateur `foo` et le mot de passe `bar`. Réaccéder à la page. Modifier les autorisations, le token enregistré dans les cookies pour tester l'application et la compréhension des JWT.
+1. Essayer d'accéder à la page sous le lien `Edit content`. Se connecter avec l'utilisateur `foo` et le mot de passe `bar`. Ré-accéder à la page. 
+2. Essayer de modifier le JWT enregistré dans les cookies pour tester l'application et la compréhension des JWT.
 
 ## Ressources
 

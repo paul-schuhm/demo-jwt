@@ -5,7 +5,7 @@
  */
 
 /**
- * Le secret pour "saler" les JWT Tokens
+ * Le secret pour "saler" les JWT Tokens (mot de passe côté serveur. A garder bien sécurisé.)
  */
 DEFINE('SECRET', 'secret_pour_signer_mes_tokens');
 

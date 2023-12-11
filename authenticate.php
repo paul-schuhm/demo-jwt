@@ -9,7 +9,7 @@ require './globals.php';
 require './utils.php';
 
 if (!(isset($_POST['login']) && isset($_POST['password']))) {
-    print_something_and_exit();
+    printSomethingAndExit();
 }
 
 //On vérifie que l'user existe (identification), que son mot de passe est correcte (authentification), et on lui donne un role
@@ -17,31 +17,33 @@ if (!(isset($_POST['login']) && isset($_POST['password']))) {
 
 //Identification
 
-$identified = $_POST['login'] === $userLogin;
+$isIdentified = $_POST['login'] === $userLogin;
 
-if (!$identified) {
+if (!$isIdentified) {
     //En vrai on donnera pas autant d'informations,
     //on ne dira pas si c'est l'identification qui a échoué, ou l'authentification
-    print_something_and_exit("You are not identified.");
+    printSomethingAndExit("You are not identified.");
 }
 
 //Authentification
 
-$authentificated = password_verify($_POST['password'], $userPasswordHash);
+$isAuthenticated = password_verify($_POST['password'], $userPasswordHash);
 
-if (!$authentificated) {
-    print_something_and_exit("You are not authentificated !");
+if (!$isAuthenticated) {
+    printSomethingAndExit("You are not authenticated !");
 }
 
 //Création d'un JWT Token avec le role dans le payload pour gérer les autorisations lors de requêtes ultérieures.
-$jwt = create_signed_jwt_token(
+$jwt = createSignedJWT(
     array(
         "alg" => 'sha256',
         "typ" => "JWT"
     ),
     array(
         'login' => 'foo',
-        'role' => 'editor'
+        'role' => 'editor',
+        'iat' => time(),
+        'duration' => 30
     ),
     SECRET
 );
@@ -51,5 +53,7 @@ setcookie('jwt', $jwt, httponly: true);
 ?>
 
 <nav>
-    <a href="edit-content.php">Éditer le contenu du site</a>
+    <a href="edit-content.php">Edit content</a>
 </nav>
+
+<p>Hello <?php echo $userLogin ?>, please try to <a href="edit-content.php">edit some website content</a></p>

@@ -5,16 +5,17 @@
  */
 
 /**
- * Retourne un JWT Token (RFC7519) signé par un secret
+ * Retourne un JWT Token (RFC7519)
+ * @see https://www.rfc-editor.org/rfc/rfc7519
  */
-function create_signed_jwt_token(array $header, array $payload, string $secret): string
+function createSignedJWT(array $header, array $payload, string $secret): string
 {
 
     $encodedHeader = encodeBase64Url(json_encode($header));
     $encodedPayload = encodeBase64Url(json_encode($payload));
 
-    //Signature créee à partir header, payload et d'un secret.
-    $signature = create_signature($encodedHeader, $encodedPayload, SECRET);
+    //Signature créée à partir header, payload et d'un secret.
+    $signature = createSignature($encodedHeader, $encodedPayload, SECRET);
 
     return sprintf(
         "%s.%s.%s",
@@ -26,20 +27,20 @@ function create_signed_jwt_token(array $header, array $payload, string $secret):
 
 
 /**
- * Retourne la signature d'un JWT Token
+ * Retourne la signature d'un JWT
  * @param string $encodedHeader. Header du JWT, encodé en base 64
  * @param string $encodedPayload. Header du JWT, encodé en base 64
  * @param string $secret. Secret privé, conservé sur le serveur
  */
-function create_signature(string $encodedHeader, string $encodedPayload, string $secret): string
+function createSignature(string $encodedHeader, string $encodedPayload, string $secret): string
 {
     return hash_hmac('sha256', sprintf("%s%s", $encodedHeader, $encodedPayload), $secret);
 }
 
 /**
- * Encode une chaine de caractère en base 64 URL
+ * Encode une chaîne de caractère en base 64 URL
  * @param string $data La chaîne à encoder
- * @return string La chaine encodée
+ * @return string La chaîne encodée
  */
 function encodeBase64Url(string $data): string
 {
@@ -47,9 +48,9 @@ function encodeBase64Url(string $data): string
 }
 
 /**
- * Decode une chaine de caractère encodée en base 64 URL
+ * Decode une chaîne de caractère encodée en base 64 URL
  * @param string $data La chaîne encodée
- * @return string La chaine décodée
+ * @return string La chaîne décodée
  */
 function decodeBase64Url(string $data): string
 {

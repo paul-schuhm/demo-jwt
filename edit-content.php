@@ -14,7 +14,7 @@ require './utils.php';
 //pour récupérer son JWT Token, puis checker l'autorisation d'accès à la page.
 
 if (!isset($_COOKIE['jwt'])) {
-    print_something_and_exit();
+    printSomethingAndExit();
 }
 
 //Validation du token signé
@@ -30,12 +30,12 @@ $payloadEncoded = $parts[1];
 $signatureFromUser = $parts[2];
 
 //Vérifie la signature du token avec le secret
-$signature = create_signature($headerEncoded, $payloadEncoded, SECRET);
+$signature = createSignature($headerEncoded, $payloadEncoded, SECRET);
 
 //Si le jwt token a été modifié (header, payload ou signature, comme le secret est fixe et conservé côté serveur, la signature sera forcément? (statistiquement) différente)
 
 if ($signature !== $signatureFromUser) {
-    print_something_and_exit("I can't trust you ! Go away !");
+    printSomethingAndExit("I can't trust you ! Go away !");
 }
 
 //On est sûrs que le token n'a pas été modifié depuis sa création, on peut extraire le rôle et vérifie si les autorisations associées permettent d'acceder à cette page.
@@ -46,17 +46,31 @@ $role = $payload->role;
 
 $login = $payload->login;
 
+//Check l'expiration
+$iat = $payload->iat;
+$duration = $payload->duration;
+
+if (time() > $iat + $duration) {
+    printSomethingAndExit('I\'m sorry but even if your token seems valid, it has expired. Please authenticate again. <a href="index.php">Go home</a>');
+}
+
 if (!isset(ROLES[$role])) {
-    print_something_and_exit("I can't trust you ! Go away ! (Your role does not exists)");
+    printSomethingAndExit("I can't trust you ! Go away ! (Your role does not exists)");
 }
 
 $authorizations = ROLES[$role];
 
 if (!in_array('edit-content', $authorizations)) {
-    print_something_and_exit("You don't have the permission to edit the content.");
+    printSomethingAndExit("You don't have the permission to edit the content.");
 }
 
 ?>
 
+
+
 <h2>Welcome <?php echo htmlentities($login); ?></h2>
-<p>Welcome my friend, you have the authorization to edit content on this website !</p>
+<p>Welcome my friend, you have the authorization (for <?php echo $iat + $duration - time() ?> seconds) to edit content on this website !</p>
+
+<form action="logout.php">
+    <input type="submit" value="Log out">
+</form>
